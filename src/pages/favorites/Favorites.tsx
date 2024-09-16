@@ -1,9 +1,9 @@
 import SearchBar from '@/components/atom/SearchBar';
-import { SortSelect } from '@/components/molecules/SortSelect';
 import CardBookPreview from '@/components/organisms/CardBookPreview';
 import { useData } from '@/hooks/useFetchData';
 import { FiSearch } from 'react-icons/fi';
 import { useMemo } from 'react';
+import { SortDropdown } from '@/components/molecules/SortDropdown';
 
 const Favorites = () => {
   const { data, finalFilteredData, loading, toggleFavorite } = useData();
@@ -26,7 +26,7 @@ const Favorites = () => {
         />
       </div>
       <div className='w-full flex justify-end'>
-        <SortSelect />
+        <SortDropdown/>
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 min-h-[calc(100vh-100px)]'>

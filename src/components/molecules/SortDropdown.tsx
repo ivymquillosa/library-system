@@ -1,39 +1,78 @@
-import NestedDropdown from "../atom/DropdownMenu";
+import { NestedDropdownMenu } from "../atom/DropdownMenu";
 
-const menuItems = [
+const items = [
   {
-    label: 'File',
+    label: "Title",
+    action: () => console.log("Profile clicked"),
     subItems: [
-      { label: 'New', action: () => console.log('New File') },
-      { label: 'Open', action: () => console.log('Open File') },
+      {
+        label: "Ascending",
+        action: () => console.log("Title Ascending clicked"),
+      },
+      {
+        label: "Descending",
+        action: () => console.log("Title Descending clicked"),
+      },
     ],
   },
   {
-    label: 'Edit',
+    label: "Author",
+    action: () => console.log("Author clicked"),
     subItems: [
-      { label: 'Undo', action: () => console.log('Undo') },
-      { label: 'Redo', action: () => console.log('Redo') },
+      {
+        label: "Ascending",
+        action: () => console.log("Author Ascending clicked"),
+      },
+      {
+        label: "Descending",
+        action: () => console.log("Author Descending clicked"),
+      },
     ],
   },
-  { label: 'Save', action: () => console.log('Save File') },
+  {
+    label: "Publisher",
+    action: () => console.log("Publisher clicked"),
+    subItems: [
+      {
+        label: "Ascending",
+        action: () => console.log("Publisher Ascending clicked"),
+      },
+      {
+        label: "Descending",
+        action: () => console.log("Publisher Descending clicked"),
+      },
+    ],
+  },
+  {
+    label: "Ratings",
+    action: () => console.log("Ratings clicked"),
+    subItems: [
+      {
+        label: "Ascending",
+        action: () => console.log("Ratings Ascending clicked"),
+      },
+      {
+        label: "Descending",
+        action: () => console.log("Ratings Descending clicked"),
+      },
+    ],
+  },
+  {
+    label: "Team",
+    subItems: [
+      {
+        label: "Ascending",
+        action: () => console.log("Team Ascending clicked"),
+      },
+      {
+        label: "Descending",
+        action: () => console.log("Team Descending clicked"),
+      },
+    ],
+  },
+ 
 ];
 
 export function SortDropdown() {
-  return ( <NestedDropdown label="Menu" items={menuItems} />
-    // <Select
-    //   color = 'primary'
-    //   radius = 'soft'
-    //   className='w-full'
-    //   selectPrefix="Sort by:"
-    //   placeHolder = 'Select a rating'
-    //   selectOptions = {[
-    //     { id: 'title', label: 'Title', value: 'title' },
-    //     { id: 'author', label: 'Author', value: 'author' },
-    //     { id: 'publisher', label: 'Publisher', value: 'publisher' },
-    //     { id: 'ratings', label: 'Ratings', value: 'ratings' },
-    //     { id: 'released', label: 'Released Date', value: 'released' },
-    //     { id: 'pages', label: 'Number of Pages', value: 'pages' }
-    //   ]}
-    // />
-  )
+  return <NestedDropdownMenu triggerLabel="Sort" items={items} />;
 }

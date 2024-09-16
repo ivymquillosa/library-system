@@ -1,89 +1,68 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import Button from './Button';
-import { PopoverPortal } from '@radix-ui/react-popover';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import React, { ReactNode } from "react"
+import Button from "./Button";
 
-interface NestedDropdownProps {
+interface NestedDropdownMenuItem {
   label: string;
-  items: Array<{
-    label: string;
-    action?: () => void;
-    subItems?: Array<{ label: string; action?: () => void }>;
-  }>;
-}
-
-const NestedDropdown = ({ label, items }: NestedDropdownProps) => {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" radius='soft'>
-          {label} <FiChevronDown className="ml-2" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverPortal>
-      
-        <PopoverContent align="start" className="p-0 w-64">
-          <DropdownMenu>
-            <DropdownMenuContent className="p-2">
-              {items.map((item, index) => (
-                <DropdownMenuItemWithSubmenu
-                  key={index}
-                  label={item.label}
-                  subItems={item.subItems}
-                  action={item.action}
-                />
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </PopoverContent>
-      </PopoverPortal>
-    </Popover>
-  );
-};
-
-interface DropdownMenuItemWithSubmenuProps {
-  label: string;
+  icon?: ReactNode;
+  shortcut?: string;
+  disabled?: boolean;
   action?: () => void;
-  subItems?: Array<{ label: string; action?: () => void }>;
+  subItems?: NestedDropdownMenuItem[];
 }
 
-const DropdownMenuItemWithSubmenu = ({
-  label,
-  action,
-  subItems,
-}: DropdownMenuItemWithSubmenuProps) => {
-  const hasSubItems = subItems && subItems.length > 0;
+interface NestedDropdownMenuProps {
+  triggerLabel: string;
+  items: NestedDropdownMenuItem[];
+}
+
+export function NestedDropdownMenu({ triggerLabel, items }: NestedDropdownMenuProps) {
+  const renderMenuItems = (menuItems: NestedDropdownMenuItem[]) => (
+    <>
+      {menuItems.map((item, index) => (
+        <React.Fragment key={index}>
+          {item.subItems ? (
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                {item.icon && <span className="mr-2">{item.icon}</span>}
+                <span>{item.label}</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  {renderMenuItems(item.subItems)}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+          ) : (
+            <DropdownMenuItem onSelect={item.action} disabled={item.disabled}>
+              {item.icon && <span className="mr-2">{item.icon}</span>}
+              <span>{item.label}</span>
+              {item.shortcut && <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>}
+            </DropdownMenuItem>
+          )}
+        </React.Fragment>
+      ))}
+    </>
+  );
 
   return (
-    <div className="relative">
-      <DropdownMenuItem className="cursor-pointer" onSelect={action}>
-        {label}
-        {hasSubItems && <FiChevronRight className="ml-auto" />}
-      </DropdownMenuItem>
-
-      {hasSubItems && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="absolute right-0 top-0 h-full w-8 cursor-pointer"></div>
-          </PopoverTrigger>
-          <PopoverPortal>
-            <PopoverContent align="start" className="absolute left-full top-0 w-48 p-0">
-              <DropdownMenu>
-                <DropdownMenuContent className="p-2">
-                  {subItems.map((subItem, subIndex) => (
-                    <DropdownMenuItem key={subIndex} onSelect={subItem.action}>
-                      {subItem.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </PopoverContent>
-          </PopoverPortal>
-        </Popover>
-      )}  
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" radius="soft" size="sm" color="primary">{triggerLabel}</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56">
+        {renderMenuItems(items)}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
-};
-
-export default NestedDropdown;
+}
