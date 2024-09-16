@@ -10,3 +10,13 @@ export const menuItems =[
         path:'/dashboard'
     }
 ]
+
+
+export const defaultFilterValue = {
+    searchKey: "",
+    exactMatch: false,
+    author: true,
+    publisher: true,
+    rating: "",
+    yearRange : { start: 0, end: 2024 },
+  }

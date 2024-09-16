@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import { createContext, useState, useEffect, ReactNode } from 'react';
 import apiClient from '@/services/api';
-import { BookDetailsTypes } from '@/types/commontypes';
+import { BookDetailsTypes, filterTypes } from '@/types/commontypes';
+import { useFilter } from '@/hooks/useFilter';
+import { defaultFilterValue } from '@/types/menuItems';
 
 interface DataContextProps {
   data: BookDetailsTypes[];
   favoriteBooks: BookDetailsTypes[];
-  filteredList: BookDetailsTypes[];
-  
+  finalFilteredData: BookDetailsTypes[];  
+  // setPageData: (pagData: BookDetailsTypes[]) => void;
+  setSearchFilters: (searchFilters : filterTypes)=> void;
   toggleFavorite: (id: string) => void;
-  setSearchKey: (key: string) => void;
-  searchKey: string;
   loading: boolean;
   error: string | null;
 }
@@ -21,7 +22,8 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<BookDetailsTypes[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchKey, setSearchKey] = useState<string>(''); // State for search key
+  // const [pageData, setPageData] = useState<BookDetailsTypes[]>([]);
+  const [searchFilters, setSearchFilters] = useState<filterTypes>(defaultFilterValue);
 
   // Fetch the data on component mount
   useEffect(() => {
@@ -48,29 +50,18 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
 
   // Favorite books filter
   const favoriteBooks = data.filter((book) => book.isFavorite);
-
-  // Filtered list based on the search key
-  const filteredList = useMemo(() => {
-    if (!searchKey) return data;
-
-    return data.filter((item) => {
-      const bookName = item?.title?.toLowerCase() || '';
-      const authorName = item?.author?.toLowerCase() || '';
-      const lowerCaseSearchKey = searchKey.toLowerCase();
-
-      return bookName.includes(lowerCaseSearchKey) || authorName.includes(lowerCaseSearchKey);
-    });
-  }, [searchKey, data]);
+  
+  const finalFilteredData =  useFilter(data, searchFilters)
 
   return (
     <DataContext.Provider
       value={{
         data,
         favoriteBooks,
-        filteredList, // Provide filtered list
+        finalFilteredData,  
+        // setPageData,
+        setSearchFilters,
         toggleFavorite,
-        setSearchKey, // Provide function to set search key
-        searchKey, // Provide the current search key
         loading,
         error
       }}

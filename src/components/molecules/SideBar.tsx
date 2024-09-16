@@ -5,52 +5,58 @@ import ButtonIcon from "../atom/ButtonIcon";
 import { cn } from "@/lib/utils";
 import { FiMenu, FiHome, FiHeart, FiList, FiLayout, FiUpload, FiSettings } from "react-icons/fi";
 import Divider from "../atom/Divider";
+import Badge from "../atom/Badge";
+import { useData } from "@/hooks/useFetchData";
 
 
-const menuItems =[
-  {
-      title:'Home',
-      path:'/home',
-      icon: <FiHome/>,
-      disable: false
-  },
-  {
-      title:'Favorites',
-      path:'/favorites',
-      icon: <FiHeart/>,
-      disable: false
-
-  },
-  {
-    title:'Categories',
-    path:'/',
-    icon: <FiList/>,
-      disable: true
-
-},
-{
-    title:'Book Request',
-    path:'/',
-    icon: <FiLayout/>,
-      disable: true
-
-},
-{
-  title:'Upload Book',
-  path:'/',
-  icon: <FiUpload/>,
-      disable: true
-
-},
-]
 
 
 const SideBar = () => {
     const [open, setOpen] = useState<boolean>(false);
+    const { data, favoriteBooks } = useData();
 
     const[curr, setCurr]=useState<number>(-1);
     const {pathname} = useLocation();
     const navigate = useNavigate();
+
+    const menuItems =[
+      {
+          title:'Home',
+          path:'/home',
+          icon: <FiHome/>,
+          disable: false,
+          count: data.length ?? 0
+      },
+      {
+          title:'Favorites',
+          path:'/favorites',
+          icon: <FiHeart/>,
+          disable: false,
+          count: favoriteBooks.length ?? 0
+      },
+      {
+        title:'Categories',
+        path:'/',
+        icon: <FiList/>,
+          disable: true
+    
+    },
+    {
+        title:'Book Request',
+        path:'/',
+        icon: <FiLayout/>,
+          disable: true
+    
+    },
+    {
+      title:'Upload Book',
+      path:'/',
+      icon: <FiUpload/>,
+          disable: true
+    
+    },
+    ]
+    
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleClick =({index, path} : any)=>{
@@ -75,14 +81,15 @@ const SideBar = () => {
         <SheetContent side="left" className="w-72 p-4">
           <nav className="pt-6">
             <ul className="flex flex-col gap-3">
-              { menuItems.map(({title, path, icon, disable}, index)=> {
+              { menuItems.map(({title, path, icon, disable, count}, index)=> {
                 return(
                   <li 
                     key={index}
                     className={cn(navClass, disable ? '!pointer-events-none  !text-default-500' : '', index === curr || pathname === path ? 'bg-primary-500 text-white': 'text-default-950' )}
                     onClick={()=>handleClick({index, path})}>
                     {icon}
-                    <Link className="text-base" to={path}>{title}</Link>
+                    <Link className="text-base flex-1" to={path}>{title}</Link>
+                    {index === curr && count && <Badge color="default" className="text-xs leading-none h-6 w-6 p-0 " variant="fill">{count}</Badge>}
                   </li>
                 )
               })}

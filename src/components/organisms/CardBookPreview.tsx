@@ -12,7 +12,7 @@ import { BookDetailsTypes, commonTypes } from "@/types/commontypes"
 import ButtonIcon from "../atom/ButtonIcon"
 import Modal from "./Modal";
 
-const cardPreviewVariants = cva('flex flex-col items-center p-6 gap-6 ',
+const cardPreviewVariants = cva('h-fit flex flex-col items-center p-6 gap-6 ',
   {
     variants: {
       color: {

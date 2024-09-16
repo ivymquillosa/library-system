@@ -28,3 +28,13 @@ export type commonTypes = {
     pageNumber ?: number,
     publisher ?: string,
   }
+
+
+  export type filterTypes = {
+    searchKey: string;
+    exactMatch: boolean;
+    author: boolean;
+    publisher: boolean;
+    rating: string;
+    yearRange: {start: number, end: number }
+  }

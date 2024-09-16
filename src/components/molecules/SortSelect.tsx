@@ -1,24 +1,21 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import Select from "../atom/Select";
 
 export function SortSelect() {
   return (
-    <Select defaultValue='title'>
-      <SelectTrigger className="w-48 border-primary-500 text-primary-600 !ring-0">
-        <SelectValue/>
-      </SelectTrigger>
-      <SelectContent>
-          <SelectItem value="title">Title</SelectItem>
-          <SelectItem value="createdDate">Created Date</SelectItem>
-          <SelectItem value="author">Author</SelectItem>
-          <SelectItem value="rate">Ratings</SelectItem>
-          <SelectItem value="pages">Number of Pages</SelectItem>
-      </SelectContent>
-    </Select>
+    <Select
+      color = 'primary'
+      radius = 'soft'
+      className='w-full'
+      selectPrefix="Sort by:"
+      placeHolder = 'Select a rating'
+      selectOptions = {[
+        { id: 'title', label: 'Title', value: 'title' },
+        { id: 'author', label: 'Author', value: 'author' },
+        { id: 'publisher', label: 'Publisher', value: 'publisher' },
+        { id: 'ratings', label: 'Ratings', value: 'ratings' },
+        { id: 'released', label: 'Released Date', value: 'released' },
+        { id: 'pages', label: 'Number of Pages', value: 'pages' }
+      ]}
+    />
   )
 }
