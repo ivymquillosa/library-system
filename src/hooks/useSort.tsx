@@ -1,30 +1,33 @@
 import { useState, useMemo } from 'react';
+import { BookDetailsTypes, SortKeysType } from '@/types/commontypes';
 
-type SortOrder = 'asc' | 'desc';
-
-function useSort<T>(data: T[], sortKey: keyof T, sortOrder: SortOrder = 'asc') {
-  const [sortedData, setSortedData] = useState<T[]>(data);
+// The hook now correctly accepts an array of BookDetailsTypes and SortKeysType
+const useSort = (data: BookDetailsTypes[], sortKey: SortKeysType) => {
+  const [sortedData, setSortedData] = useState<BookDetailsTypes[]>(data);
 
   useMemo(() => {
-    if (!sortKey) {
-      setSortedData(data); // If no sortKey, return unsorted data
+    if (!sortKey || !sortKey.key) {
+      setSortedData(data); // If no sortKey is provided, return unsorted data
       return;
     }
 
     const sorted = [...data].sort((a, b) => {
-      if (a[sortKey] < b[sortKey]) {
+      const key = sortKey.key.toLocaleLowerCase() as keyof BookDetailsTypes; // Ensure we're working with valid keys from BookDetailsTypes
+      const sortOrder = sortKey.order;
+
+      if (a[key] < b[key]) {
         return sortOrder === 'asc' ? -1 : 1;
       }
-      if (a[sortKey] > b[sortKey]) {
+      if (a[key] > b[key]) {
         return sortOrder === 'asc' ? 1 : -1;
       }
       return 0;
     });
 
     setSortedData(sorted);
-  }, [data, sortKey, sortOrder]);
+  }, [data, sortKey]);
 
   return sortedData;
-}
+};
 
 export default useSort;

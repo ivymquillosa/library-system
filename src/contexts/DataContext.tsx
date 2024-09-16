@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import apiClient from '@/services/api';
-import { BookDetailsTypes, filterTypes } from '@/types/commontypes';
+import { BookDetailsTypes, filterTypes, SortKeysType } from '@/types/commontypes';
 import { useFilter } from '@/hooks/useFilter';
 import { defaultFilterValue } from '@/types/menuItems';
+import useSort from '@/hooks/useSort';
 
 interface DataContextProps {
   data: BookDetailsTypes[];
   favoriteBooks: BookDetailsTypes[];
   finalFilteredData: BookDetailsTypes[];  
-  // setPageData: (pagData: BookDetailsTypes[]) => void;
+  sortKeys: SortKeysType;
+  setSortKeys : (sortKeys: SortKeysType) => void;
   setSearchFilters: (searchFilters : filterTypes)=> void;
   toggleFavorite: (id: string) => void;
   loading: boolean;
@@ -22,7 +24,7 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<BookDetailsTypes[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // const [pageData, setPageData] = useState<BookDetailsTypes[]>([]);
+  const [sortKey, setSortKeys] = useState<SortKeysType>({ key:'', order: 'asc' })
   const [searchFilters, setSearchFilters] = useState<filterTypes>(defaultFilterValue);
 
   // Fetch the data on component mount
@@ -51,7 +53,10 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
   // Favorite books filter
   const favoriteBooks = data.filter((book) => book.isFavorite);
   
-  const finalFilteredData =  useFilter(data, searchFilters)
+  const filteredData = useFilter(data, searchFilters)
+
+  const finalFilteredData =  useSort(filteredData, sortKey); 
+  
 
   return (
     <DataContext.Provider
@@ -59,7 +64,8 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
         data,
         favoriteBooks,
         finalFilteredData,  
-        // setPageData,
+        sortKeys: sortKey,
+        setSortKeys,
         setSearchFilters,
         toggleFavorite,
         loading,

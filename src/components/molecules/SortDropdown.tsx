@@ -1,78 +1,31 @@
+import { useData } from "@/hooks/useFetchData";
 import { NestedDropdownMenu } from "../atom/DropdownMenu";
 
-const items = [
-  {
-    label: "Title",
-    action: () => console.log("Profile clicked"),
-    subItems: [
-      {
-        label: "Ascending",
-        action: () => console.log("Title Ascending clicked"),
-      },
-      {
-        label: "Descending",
-        action: () => console.log("Title Descending clicked"),
-      },
-    ],
-  },
-  {
-    label: "Author",
-    action: () => console.log("Author clicked"),
-    subItems: [
-      {
-        label: "Ascending",
-        action: () => console.log("Author Ascending clicked"),
-      },
-      {
-        label: "Descending",
-        action: () => console.log("Author Descending clicked"),
-      },
-    ],
-  },
-  {
-    label: "Publisher",
-    action: () => console.log("Publisher clicked"),
-    subItems: [
-      {
-        label: "Ascending",
-        action: () => console.log("Publisher Ascending clicked"),
-      },
-      {
-        label: "Descending",
-        action: () => console.log("Publisher Descending clicked"),
-      },
-    ],
-  },
-  {
-    label: "Ratings",
-    action: () => console.log("Ratings clicked"),
-    subItems: [
-      {
-        label: "Ascending",
-        action: () => console.log("Ratings Ascending clicked"),
-      },
-      {
-        label: "Descending",
-        action: () => console.log("Ratings Descending clicked"),
-      },
-    ],
-  },
-  {
-    label: "Team",
-    subItems: [
-      {
-        label: "Ascending",
-        action: () => console.log("Team Ascending clicked"),
-      },
-      {
-        label: "Descending",
-        action: () => console.log("Team Descending clicked"),
-      },
-    ],
-  },
- 
-];
+const items = [ "Title", "Author", "Publisher", "Ratings" ];
+export interface SortKeysType {
+  key: string,
+  order: 'asc' | 'desc'
+}
 
 export function SortDropdown() {
-  return <NestedDropdownMenu triggerLabel="Sort" items={items} />;
+  const {setSortKeys } = useData()
+
+  const handleAction = (key: string, order: 'asc' | 'desc') => {
+    setSortKeys({ key, order });
+  };
+
+  const menuItems = items.map(item => ({
+    label: item,
+    subItems: [
+      {
+        label: 'Ascending',
+        action: () => handleAction(item, 'asc'),
+      },
+      {
+        label: 'Descending',
+        action: () => handleAction(item, 'desc'),
+      }
+    ],
+  }));
+  return <NestedDropdownMenu triggerLabel="Sort by" items={menuItems} />;
 }

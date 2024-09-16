@@ -40,16 +40,15 @@ export const useFilter = (data: BookDetailsTypes[], filters: filterTypes) => {
       // Rating filter
       const matchRating = rating === '' || rating === null || rating === undefined || (bookRating.toString().trim() === rating.trim());
 
-      // Year filter
       // Year filter with range (convert releaseDate to number)
       const releaseYear = parseInt(releaseDate);
       const startYear = yearRange.start  || null;
       const endYear = yearRange.end || null;
-
       const matchYear = (!startYear || releaseYear >= startYear) && (!endYear || releaseYear <= endYear);
 
-
-      return matchSearch && matchRating && matchYear;
+      const filteredData = matchSearch && matchRating && matchYear;
+      
+      return filteredData
     });
   }, [data, lowerCaseSearchKey, exactMatch, author, publisher, rating, yearRange]);
 

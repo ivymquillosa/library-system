@@ -29,6 +29,10 @@ export type commonTypes = {
     publisher ?: string,
   }
 
+  export type SortKeysType = {
+    key: string,
+    order: 'asc' | 'desc'
+  }
 
   export type filterTypes = {
     searchKey: string;

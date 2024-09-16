@@ -12,22 +12,22 @@ import {
 import React, { ReactNode } from "react"
 import Button from "./Button";
 
-interface NestedDropdownMenuItem {
+interface NestedDropdownMenuItemType {
   label: string;
   icon?: ReactNode;
   shortcut?: string;
   disabled?: boolean;
   action?: () => void;
-  subItems?: NestedDropdownMenuItem[];
+  subItems?: NestedDropdownMenuItemType[];
 }
 
 interface NestedDropdownMenuProps {
   triggerLabel: string;
-  items: NestedDropdownMenuItem[];
+  items: NestedDropdownMenuItemType[];
 }
 
 export function NestedDropdownMenu({ triggerLabel, items }: NestedDropdownMenuProps) {
-  const renderMenuItems = (menuItems: NestedDropdownMenuItem[]) => (
+  const renderMenuItems = (menuItems: NestedDropdownMenuItemType[]) => (
     <>
       {menuItems.map((item, index) => (
         <React.Fragment key={index}>
@@ -35,7 +35,7 @@ export function NestedDropdownMenu({ triggerLabel, items }: NestedDropdownMenuPr
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 {item.icon && <span className="mr-2">{item.icon}</span>}
-                <span>{item.label}</span>
+                <span className="capitalize">{item.label}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
@@ -46,7 +46,7 @@ export function NestedDropdownMenu({ triggerLabel, items }: NestedDropdownMenuPr
           ) : (
             <DropdownMenuItem onSelect={item.action} disabled={item.disabled}>
               {item.icon && <span className="mr-2">{item.icon}</span>}
-              <span>{item.label}</span>
+              <span className="capitalize">{item.label}</span>
               {item.shortcut && <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>}
             </DropdownMenuItem>
           )}
@@ -56,11 +56,11 @@ export function NestedDropdownMenu({ triggerLabel, items }: NestedDropdownMenuPr
   );
 
   return (
-    <DropdownMenu>
+    <DropdownMenu >
       <DropdownMenuTrigger asChild>
         <Button variant="outline" radius="soft" size="sm" color="primary">{triggerLabel}</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent side="bottom" align="end" className="w-32 right-0">
         {renderMenuItems(items)}
       </DropdownMenuContent>
     </DropdownMenu>
